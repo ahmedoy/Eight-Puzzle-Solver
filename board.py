@@ -25,8 +25,8 @@ class Board:
         #TODO handle invalid initial states 
         pass
 
-    def check_win(self):
-        return self.arr == self.target_state
+    def check_win(self):        
+        return np.array_equal(self.arr, self.target_state)
 
     def get_state(self):
         return self.arr
@@ -43,8 +43,10 @@ class Board:
             zero_coordinate = tuple(zero_coordinate)
             new_position = tuple(new_position)
             self.arr[zero_coordinate], self.arr[new_position] = self.arr[new_position], self.arr[zero_coordinate]
+            return True
         else:
             print("Action not taken")
+            return False
 
  
     def get_zero_coordinate(self):
