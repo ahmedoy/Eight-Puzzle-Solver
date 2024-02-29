@@ -22,7 +22,7 @@ class Screen:
                 x1 = x0 + self.tile_size
                 y1 = y0 + self.tile_size                
                 if board_state[i][j] != 0: 
-                    self.canvas.create_rectangle(x0, y0, x1, y1, outline="black", fill="blue")
+                    self.canvas.create_rectangle(x0, y0, x1, y1, outline="black", fill="red")
                     self.canvas.create_text((x0 + x1) / 2, (y0 + y1) / 2, text=str(board_state[i][j]), fill="black")
                 else:
                     self.canvas.create_rectangle(x0, y0, x1, y1, outline="black", fill="white")
