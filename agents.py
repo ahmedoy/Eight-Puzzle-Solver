@@ -90,7 +90,7 @@ class AStarAgent(Agent):
                 if temp_node in priority_queue: #Decrease Key
                     heuristic = self.get_heuristic(state, manhattan_flag)
                     if temp_node.cost + heuristic < priority_queue[temp_node]:
-                        temp_node[temp_node.cost + heuristic]
+                        priority_queue[temp_node] = temp_node.cost + heuristic
 
         if goal_node:  # if a solution was found, build the action plan
             return self.get_action_plan(goal_node)
