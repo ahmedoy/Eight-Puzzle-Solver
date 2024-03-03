@@ -55,7 +55,15 @@ class Agent:
             current_node = current_node.parent
         action_plan.reverse()
         return action_plan
-
+    @staticmethod
+    def isSolvable(board_state):
+        inv_count = 0
+        for i in range(9):
+            for j in range(i+1, 9):
+                if board_state[j] and board_state[i] and board_state[i] > board_state[j]:
+                    inv_count += 1
+        return inv_count % 2 == 0
+    
     def __init__(self, current_state):
         self.current_state = current_state
 
@@ -118,6 +126,41 @@ class AStarAgent(Agent):
             h += np.sqrt(np.square((np.array(np.where(board_state == i)) -
                          np.array(np.where(self.target_state == i)))).sum())
         return h
+class BFSAgent(Agent):
 
+    def __init__(self, current_state):
+        super().__init__(current_state)
 
+    def solve (self):
+        explored_states = set()
+        # make a queue of nodes to visit
+        queue = []
+        # Insert initial state with no parents in queue
+        initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
+        if not self.isSolvable(initial_node.board_state):
+            return False
+        
+        queue.append(initial_node)
+        goal_node = None
 
+        while len(queue) > 0:
+            chosen_node = queue.pop(0)
+
+            if self.goal_reached(chosen_node.board_state):
+                goal_node = chosen_node
+                break
+
+            explored_states.add(tuple(chosen_node.board_state.flatten()))
+            next_states = self.get_next_states(chosen_node.board_state)
+
+            for action, state in next_states:
+                temp_node = Node(board_state=state, action=action, cost=1+chosen_node.cost, parent=chosen_node)
+                if tuple(state.flatten()) not in explored_states and temp_node not in queue:
+                    queue.append(temp_node)
+                    explored_states.add(tuple(state.flatten()))
+
+        if goal_node:
+            return self.get_action_plan(goal_node)
+        else:
+            return False
+        
