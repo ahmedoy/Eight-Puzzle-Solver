@@ -1,6 +1,7 @@
 import numpy as np
 import heapdict
 from solution import Node
+from collections import deque
 
 # Base Class for Agents to inherit from
 class Agent:
@@ -134,7 +135,7 @@ class BFSAgent(Agent):
     def solve (self):
         explored_states = set()
         # make a queue of nodes to visit
-        queue = []
+        queue = deque()
         # Insert initial state with no parents in queue
         initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
         # if not self.isSolvable(initial_node.board_state):
@@ -144,7 +145,7 @@ class BFSAgent(Agent):
         goal_node = None
 
         while len(queue) > 0:
-            chosen_node = queue.pop(0)
+            chosen_node = queue.popleft()
 
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
