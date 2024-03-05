@@ -6,14 +6,15 @@ import agents
 
 class Game:
     def __init__(self,  display=False):
-        initial_state = [1,2,0,3,4,5,6,7,8]
+        initial_state = [6,4,7,8,5,0,3,1,2]
         self.board = board.Board(initial_state)
         if not self.board.is_solvable():
             print("Insolvable State. Quitting Game")
             return
         self.display = display
         self.agent = agents.AStarAgent(self.board.get_state())
-        self.action_plan = self.agent.solve() #TODO handle if no solution found (empty action plan list)
+        self.action_plan = self.agent.solve()
+        print(f"Total Cost = {len(self.action_plan)}")
         self.action_idx = 0   
         self.key_responses()
         if display:

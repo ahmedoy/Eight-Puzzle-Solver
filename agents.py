@@ -137,8 +137,8 @@ class BFSAgent(Agent):
         queue = []
         # Insert initial state with no parents in queue
         initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
-        if not self.isSolvable(initial_node.board_state):
-            return False
+        # if not self.isSolvable(initial_node.board_state):
+        #     return False
         
         queue.append(initial_node)
         goal_node = None

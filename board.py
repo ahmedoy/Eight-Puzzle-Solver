@@ -54,7 +54,7 @@ class Board:
         arr_1d = self.arr.reshape(-1)
         for i in range(arr_1d.shape[0]-1):
             for j in range(i+1, arr_1d.shape[0]):
-                if arr_1d[j] < arr_1d[i]:
+                if arr_1d[j] < arr_1d[i] and arr_1d[j] != 0:
                     solvable = not solvable
 
         return solvable
