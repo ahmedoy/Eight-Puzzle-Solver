@@ -6,10 +6,11 @@ import agents
 
 class Game:
     def __init__(self,  display=False):
-        initial_state = [1,4,2,
-                         6,3,7,
-                         8,0,5]
+        initial_state = [1,2,0,3,4,5,6,7,8]
         self.board = board.Board(initial_state)
+        if not self.board.is_solvable():
+            print("Insolvable State. Quitting Game")
+            return
         self.display = display
         self.agent = agents.AStarAgent(self.board.get_state())
         self.action_plan = self.agent.solve() #TODO handle if no solution found (empty action plan list)

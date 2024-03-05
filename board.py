@@ -21,10 +21,6 @@ class Board:
         self.target_state = np.arange(9).reshape(3,3)
     
 
-    def validate_state(self):
-        #TODO handle invalid initial states 
-        pass
-
     def check_win(self):        
         return np.array_equal(self.arr, self.target_state)
 
@@ -51,3 +47,14 @@ class Board:
  
     def get_zero_coordinate(self):
         return np.array(np.where(self.arr==0)).reshape(2)
+    
+
+    def is_solvable(self):
+        solvable = True
+        arr_1d = self.arr.reshape(-1)
+        for i in range(arr_1d.shape[0]-1):
+            for j in range(i+1, arr_1d.shape[0]):
+                if arr_1d[j] < arr_1d[i]:
+                    solvable = not solvable
+
+        return solvable

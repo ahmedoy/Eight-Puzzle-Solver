@@ -95,7 +95,7 @@ class AStarAgent(Agent):
         if goal_node:  # if a solution was found, build the action plan
             return self.get_action_plan(goal_node)
         else:
-            return False  # Solution Not Found
+            return False  # Solution Not Found (empty action plan)
 
     def get_heuristic(self, board_state, manhattan_flag=True):
         if manhattan_flag:
