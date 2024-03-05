@@ -9,6 +9,7 @@ class Screen:
 
         self.window = tk.Tk()
         self.canvas = tk.Canvas(self.window, width=self.window_width, height=self.window_height)
+        self.window.title("8-Puzzle Game")
         self.canvas.pack()
 
     def display(self, board_state):
