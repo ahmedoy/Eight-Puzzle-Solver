@@ -2,6 +2,7 @@ import keyboard
 import screen
 import board
 import agents
+import time
 
 
 class Game:
@@ -16,9 +17,12 @@ class Game:
             print("Insolvable State. Quitting Game")
             return
         self.display = display
+        start_time = time.time()
         #self.agent = agents.AStarAgent(self.board.get_state())
-        self.agent= agents.BFSAgent(self.board.get_state().copy())
+        #self.agent= agents.BFSAgent(self.board.get_state())
+        self.agent= agents.DFSAgent(self.board.get_state())
         self.expanded_nodes, self.action_plan = self.agent.solve() #TODO handle if no solution found (empty action plan list)
+        print(f"Time: {time.time() - start_time} seconds")
         print(f"Total Cost: {len(self.action_plan)}")
         self.action_idx = 0   
         self.nodes_idx = 0
