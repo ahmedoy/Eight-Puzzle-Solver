@@ -1,6 +1,7 @@
 import numpy as np
 import heapdict
 from solution import Node
+from collections import deque
 
 # Base Class for Agents to inherit from
 class Agent:
@@ -36,7 +37,13 @@ class Agent:
         y_coordinate = zero_pos[0]
         available_actions = vertical_actions[y_coordinate] + \
             horizontal_actions[x_coordinate]
-        return available_actions
+        
+
+        #Change order of actions in this list to control which actions get tried first
+        action_order = [ "right","down", "left","up"]
+
+
+        return sorted(available_actions, key=lambda action: action_order.index(action))
 
     @staticmethod
     def get_next_states(board_state):
@@ -103,6 +110,8 @@ class AStarAgent(Agent):
 
         if goal_node:  # if a solution was found, build the action plan
             return explored_states_list,self.get_action_plan(goal_node)
+            print(f"Total Number Visited: {len(explored_states)}")
+            return self.get_action_plan(goal_node)
         else:
             return False  # Solution Not Found (empty action plan)
 
@@ -136,12 +145,15 @@ class BFSAgent(Agent):
         explored_states = set()
         explored_states_list = []
         # make a queue of nodes to visit
-        queue = []
+        queue = deque()
         # Insert initial state with no parents in queue
         initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
         #if not self.isSolvable(initial_node.board_state):
         #    return False
 
+        # if not self.isSolvable(initial_node.board_state):
+        #     return False
+        
         queue.append(initial_node)
         goal_node = None
 
@@ -149,6 +161,8 @@ class BFSAgent(Agent):
             chosen_node = queue.pop(0)
             explored_states.add(tuple(chosen_node.board_state.flatten()))
             explored_states_list.append(chosen_node.board_state)
+            chosen_node = queue.popleft()
+
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
                 break
@@ -163,6 +177,45 @@ class BFSAgent(Agent):
 
         if goal_node:
             return explored_states_list ,self.get_action_plan(goal_node)
+            print(f"Total Number Visited: {len(explored_states)}")
+            return self.get_action_plan(goal_node)
         else:
             return False
-        
+
+
+class DFSAgent(Agent):
+
+    def __init__(self, current_state):
+        super().__init__(current_state)
+
+    def solve(self):
+        explored_states = set()
+        # make a stack of nodes to visit 
+        stack = []
+        # Insert initial state with no parents in stack
+        initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
+
+        stack.append(initial_node)
+        goal_node = None
+
+        while stack:
+            chosen_node = stack.pop()
+
+            explored_states.add(tuple(chosen_node.board_state.flatten()))
+            if self.goal_reached(chosen_node.board_state):
+                goal_node = chosen_node
+                break
+
+            next_states = self.get_next_states(chosen_node.board_state)
+
+            # Push unexplored next states onto the stack
+            for action, state in next_states:
+                temp_node = Node(board_state=state, action=action, cost=1 + chosen_node.cost, parent=chosen_node)
+                if tuple(state.flatten()) not in explored_states and temp_node not in stack:
+                    stack.append(temp_node)
+                    explored_states.add(tuple(state.flatten()))
+
+        if goal_node:
+            return self.get_action_plan(goal_node)
+        else:
+            return False

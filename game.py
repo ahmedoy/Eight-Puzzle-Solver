@@ -6,7 +6,7 @@ import agents
 
 class Game:
     def __init__(self,  display=False):
-        initial_state = [1,2,0,3,4,5,6,7,8]
+        initial_state = [1,2,3,4,0,5,6,7,8]
         self.board = board.Board(initial_state)
         if not self.board.is_solvable():
             print("Insolvable State. Quitting Game")

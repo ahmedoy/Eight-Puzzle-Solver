@@ -21,6 +21,13 @@ class Screen:
     def display(self, board_state, nodes_expanded):
         self.solution_canvas.delete("all")
         self.expanded_nodes_canvas.delete("all")
+        self.canvas = tk.Canvas(self.window, width=self.window_width, height=self.window_height)
+        self.window.title("8-Puzzle Game")
+        self.canvas.pack()
+
+    def display(self, board_state):
+        self.canvas.delete("all")
+        
         # Iterate over the board state and display tiles
         for i in range(board_state.shape[0]):
             for j in range(board_state.shape[1]):
