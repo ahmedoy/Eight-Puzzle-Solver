@@ -20,6 +20,7 @@ class Game:
         self.agent= agents.BFSAgent(self.board.get_state())
         self.expanded_nodes, self.action_plan = self.agent.solve() #TODO handle if no solution found (empty action plan list)
         self.action_idx = 0   
+        self.nodes_idx = 0
         self.key_responses()
         if display:
             print("Creating Window")
@@ -37,30 +38,29 @@ class Game:
     def key_responses(self):
         keyboard.on_press_key("left", self.on_arrow_key)
         keyboard.on_press_key("right", self.on_arrow_key)
+        keyboard.on_press_key("up", self.on_arrow_key)
+        keyboard.on_press_key("down", self.on_arrow_key)
 
 
     def on_arrow_key(self, event):
         inverted_controls = {'up':'down', 'down':'up', 'right':'left', 'left':'right'} #inverted controls for replaying action plan backwards
-        if event.name == 'right' and self.action_idx < len(self.action_plan):
-            #print(f"action plan = {self.action_plan[self.action_idx]}")
+        print(f"Event Name: {event.name}")
+        if event.name == 'right' and self.action_idx < len(self.action_plan) :
             self.board.take_action(self.action_plan[self.action_idx])
-            #print(f"expanded nodes = {self.expanded_nodes[self.action_idx]}")
-            #self.expanded_nodes_board.take_action(self.expanded_nodes[self.action_idx])
+            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.nodes_idx])
             self.action_idx +=1
-            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
-        elif event.name =='right' and self.action_idx < len(self.expanded_nodes) - 1:
-            #self.expanded_nodes_board.take_action(self.expanded_nodes[self.action_idx])
-            self.action_idx +=1
-            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
-        elif event.name == 'left' and self.action_idx >= 0 and self.action_idx < len(self.action_plan):
+        elif event.name == 'left' and self.action_idx > 0:
             self.action_idx -= 1
             self.board.take_action(inverted_controls[self.action_plan[self.action_idx]])
-            #self.expanded_nodes_board.take_action(inverted_controls[self.expanded_nodes[self.action_idx]])
-            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
-        elif event.name == 'left' and self.action_idx >= 0 and self.action_idx < len(self.expanded_nodes):
-            self.action_idx -= 1
-            #self.expanded_nodes_board.take_action(inverted_controls[self.expanded_nodes[self.action_idx]])
-            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
+            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.nodes_idx])
+        elif event.name == 'up' and self.nodes_idx < len(self.expanded_nodes) -1:
+            self.nodes_idx += 1
+            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.nodes_idx])
+        elif event.name == 'down' and self.nodes_idx > 0:
+            self.nodes_idx -= 1
+            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.nodes_idx])
+        
+
         
 
     
