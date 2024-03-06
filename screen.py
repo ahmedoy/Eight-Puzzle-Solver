@@ -25,7 +25,7 @@ class Screen:
         self.window.title("8-Puzzle Game")
         self.canvas.pack()
 
-    def display(self, board_state):
+    def display(self, board_state,nodes_expanded):
         self.canvas.delete("all")
         
         # Iterate over the board state and display tiles
