@@ -37,7 +37,13 @@ class Agent:
         y_coordinate = zero_pos[0]
         available_actions = vertical_actions[y_coordinate] + \
             horizontal_actions[x_coordinate]
-        return available_actions
+        
+
+        #Change order of actions in this list to control which actions get tried first
+        action_order = [ "right","down", "left","up"]
+
+
+        return sorted(available_actions, key=lambda action: action_order.index(action))
 
     @staticmethod
     def get_next_states(board_state):
@@ -186,17 +192,17 @@ class DFSAgent(Agent):
         while stack:
             chosen_node = stack.pop()
 
+            explored_states.add(tuple(chosen_node.board_state.flatten()))
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
                 break
 
-            explored_states.add(tuple(chosen_node.board_state.flatten()))
             next_states = self.get_next_states(chosen_node.board_state)
 
             # Push unexplored next states onto the stack
             for action, state in next_states:
                 temp_node = Node(board_state=state, action=action, cost=1 + chosen_node.cost, parent=chosen_node)
-                if tuple(state.flatten()) not in explored_states:
+                if tuple(state.flatten()) not in explored_states and temp_node not in stack:
                     stack.append(temp_node)
                     explored_states.add(tuple(state.flatten()))
 
