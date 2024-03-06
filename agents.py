@@ -163,7 +163,6 @@ class BFSAgent(Agent):
                 temp_node = Node(board_state=state, action=action, cost=1+chosen_node.cost, parent=chosen_node)
                 if tuple(state.flatten()) not in explored_states and temp_node not in queue:
                     queue.append(temp_node)
-                    explored_states.add(tuple(state.flatten()))
 
         if goal_node:
             print(f"Total Number Visited: {len(explored_states)}")
@@ -205,7 +204,6 @@ class DFSAgent(Agent):
                 temp_node = Node(board_state=state, action=action, cost=1 + chosen_node.cost, parent=chosen_node)
                 if tuple(state.flatten()) not in explored_states and temp_node not in stack:
                     stack.append(temp_node)
-                    explored_states.add(tuple(state.flatten()))
 
         if goal_node:
             print(f"Total Number Visited: {len(explored_states)}")
