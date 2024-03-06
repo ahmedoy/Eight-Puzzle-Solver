@@ -10,7 +10,7 @@ class Game:
         #initial_state = screen.Screen.get_initial_state()
         input_field = input("Enter Initial State: ")
         initial_state = [int(digit) for digit in str(input_field)]
-        print(f"Entered Initial State: {initial_state}")
+        #print(f"Entered Initial State: {initial_state}")
         self.board = board.Board(initial_state)
         if not self.board.is_solvable():
             print("Insolvable State. Quitting Game")
@@ -44,7 +44,7 @@ class Game:
 
     def on_arrow_key(self, event):
         inverted_controls = {'up':'down', 'down':'up', 'right':'left', 'left':'right'} #inverted controls for replaying action plan backwards
-        print(f"Event Name: {event.name}")
+        #print(f"Event Name: {event.name}")
         if event.name == 'right' and self.action_idx < len(self.action_plan) :
             self.board.take_action(self.action_plan[self.action_idx])
             self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.nodes_idx])
