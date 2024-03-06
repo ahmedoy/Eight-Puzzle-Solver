@@ -158,10 +158,9 @@ class BFSAgent(Agent):
         goal_node = None
 
         while len(queue) > 0:
-            chosen_node = queue.pop(0)
+            chosen_node = queue.popleft()
             explored_states.add(tuple(chosen_node.board_state.flatten()))
             explored_states_list.append(chosen_node.board_state)
-            chosen_node = queue.popleft()
 
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
