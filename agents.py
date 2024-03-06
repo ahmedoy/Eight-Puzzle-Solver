@@ -166,4 +166,41 @@ class BFSAgent(Agent):
             return self.get_action_plan(goal_node)
         else:
             return False
-        
+
+
+class DFSAgent(Agent):
+
+    def __init__(self, current_state):
+        super().__init__(current_state)
+
+    def solve(self):
+        explored_states = set()
+        # make a stack of nodes to visit 
+        stack = []
+        # Insert initial state with no parents in stack
+        initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
+
+        stack.append(initial_node)
+        goal_node = None
+
+        while stack:
+            chosen_node = stack.pop()
+
+            if self.goal_reached(chosen_node.board_state):
+                goal_node = chosen_node
+                break
+
+            explored_states.add(tuple(chosen_node.board_state.flatten()))
+            next_states = self.get_next_states(chosen_node.board_state)
+
+            # Push unexplored next states onto the stack
+            for action, state in next_states:
+                temp_node = Node(board_state=state, action=action, cost=1 + chosen_node.cost, parent=chosen_node)
+                if tuple(state.flatten()) not in explored_states:
+                    stack.append(temp_node)
+                    explored_states.add(tuple(state.flatten()))
+
+        if goal_node:
+            return self.get_action_plan(goal_node)
+        else:
+            return False
