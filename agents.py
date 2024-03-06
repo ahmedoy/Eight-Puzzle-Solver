@@ -63,13 +63,13 @@ class Agent:
         action_plan.reverse()
         return action_plan
     @staticmethod
-    def isSolvable(board_state):
-        inv_count = 0
-        for i in range(9):
-            for j in range(i+1, 9):
-                if board_state[j] and board_state[i] and board_state[i] > board_state[j]:
-                    inv_count += 1
-        return inv_count % 2 == 0
+    #def isSolvable(board_state):
+    #    inv_count = 0
+    #    for i in range(9):
+    #        for j in range(i+1, 9):
+    #            if board_state[j] and board_state[i] and board_state[i] > board_state[j]:
+    #                inv_count += 1
+    #    return inv_count % 2 == 0
     
     def __init__(self, current_state):
         self.current_state = current_state
@@ -109,7 +109,6 @@ class AStarAgent(Agent):
                         priority_queue[temp_node] = temp_node.cost + heuristic
 
         if goal_node:  # if a solution was found, build the action plan
-            return explored_states_list,self.get_action_plan(goal_node)
             print(f"Total Number Visited: {len(explored_states)}")
             return self.get_action_plan(goal_node)
         else:
@@ -175,7 +174,6 @@ class BFSAgent(Agent):
                     explored_states.add(tuple(state.flatten()))
 
         if goal_node:
-            return explored_states_list ,self.get_action_plan(goal_node)
             print(f"Total Number Visited: {len(explored_states)}")
             return self.get_action_plan(goal_node)
         else:
@@ -191,6 +189,7 @@ class DFSAgent(Agent):
         explored_states = set()
         # make a stack of nodes to visit 
         stack = []
+        explored_states_list = []
         # Insert initial state with no parents in stack
         initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
 
@@ -201,12 +200,14 @@ class DFSAgent(Agent):
             chosen_node = stack.pop()
 
             explored_states.add(tuple(chosen_node.board_state.flatten()))
+            explored_states_list.append(chosen_node.board_state)
+
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
                 break
 
             next_states = self.get_next_states(chosen_node.board_state)
-
+            
             # Push unexplored next states onto the stack
             for action, state in next_states:
                 temp_node = Node(board_state=state, action=action, cost=1 + chosen_node.cost, parent=chosen_node)
@@ -215,6 +216,7 @@ class DFSAgent(Agent):
                     explored_states.add(tuple(state.flatten()))
 
         if goal_node:
+            print(f"Total Number Visited: {len(explored_states)}")
             return self.get_action_plan(goal_node)
         else:
             return False

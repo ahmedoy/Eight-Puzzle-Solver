@@ -6,17 +6,26 @@ class Screen:
         self.window_height = window_height
         self.window_width = window_width    
         self.allow_keyboard = allow_keyboard
+        self.initial_state = 0
 
         self.window = tk.Tk()
         self.solution_canvas = tk.Canvas(self.window, width=self.window_width, height=self.window_height)
         self.expanded_nodes_canvas = tk.Canvas(self.window, width=self.window_width, height=self.window_height)
         self.path_label = tk.Label(self.window, text="Path Nodes", font=('calibre',10,'bold'))
         self.expanded_nodes_label = tk.Label(self.window, text="Expanded Nodes", font=('calibre',10,'bold'))
+     #   self.input_field = tk.Entry(self.window, height=10, width=40)
+     #   self.input_button = tk.Button(self.window, text="Submit Initial State", command=self.on_submit)
         self.solution_canvas.grid(row=0, column=0)
         self.expanded_nodes_canvas.grid(row=0, column=1)
         self.path_label.grid(row=1, column=0)
         self.expanded_nodes_label.grid(row=1, column=1)
     
+    #def on_submit(self):
+    #    self.initial_state = self.input_field.get("1.0", "end-1c")
+    #    print("Text entered:", self.initial_state)
+
+    #def get_initial_state(self):
+    #    return self.initial_state
         
     def display(self, board_state, nodes_expanded):
         self.solution_canvas.delete("all")

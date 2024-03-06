@@ -6,20 +6,25 @@ import agents
 
 class Game:
     def __init__(self,  display=False):
-        initial_state = [1,2,3,4,0,5,6,7,8]
+        #initial_state = [1,2,3,4,5,6,7,8,0]
+        #initial_state = screen.Screen.get_initial_state()
+        input_field = input("Enter Initial State: ")
+        initial_state = [int(digit) for digit in str(input_field)]
+        print(f"Entered Initial State: {initial_state}")
         self.board = board.Board(initial_state)
         if not self.board.is_solvable():
             print("Insolvable State. Quitting Game")
             return
         self.display = display
         self.agent = agents.AStarAgent(self.board.get_state())
-        self.agent= agents.BFSAgent(self.board.get_state())
+        #self.agent= agents.BFSAgent(self.board.get_state())
         self.expanded_nodes, self.action_plan = self.agent.solve() #TODO handle if no solution found (empty action plan list)
         self.action_idx = 0   
         self.key_responses()
         if display:
             print("Creating Window")
             self.create_window()
+        print(f"Total Cost: {len(self.action_plan)}")
         self.game_loop()        
 
     
