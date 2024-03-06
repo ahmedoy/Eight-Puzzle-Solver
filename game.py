@@ -17,15 +17,15 @@ class Game:
             return
         self.display = display
         #self.agent = agents.AStarAgent(self.board.get_state())
-        self.agent= agents.BFSAgent(self.board.get_state())
+        self.agent= agents.BFSAgent(self.board.get_state().copy())
         self.expanded_nodes, self.action_plan = self.agent.solve() #TODO handle if no solution found (empty action plan list)
+        print(f"Total Cost: {len(self.action_plan)}")
         self.action_idx = 0   
         self.nodes_idx = 0
         self.key_responses()
         if display:
             print("Creating Window")
             self.create_window()
-        print(f"Total Cost: {len(self.action_plan)}")
         self.game_loop()        
 
     
