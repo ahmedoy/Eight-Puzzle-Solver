@@ -40,7 +40,7 @@ class Agent:
         
 
         #Change order of actions in this list to control which actions get tried first
-        action_order = [ "right","down", "left","up"]
+        action_order = [ "down","left" ,"up", "right"]
 
 
         return sorted(available_actions, key=lambda action: action_order.index(action))
@@ -74,6 +74,7 @@ class AStarAgent(Agent):
     def solve(self, manhattan_flag=True):
         explored_states = set()
         explored_states_list =[]
+        max_depth_reached = 0
         priority_queue = heapdict.heapdict() # Insert initial state with no parents in priority queue
         initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
         priority_queue[initial_node] = 0
@@ -83,6 +84,10 @@ class AStarAgent(Agent):
             (chosen_node, priority) = priority_queue.popitem()
             explored_states.add(tuple(chosen_node.board_state.flatten()))
             explored_states_list.append(chosen_node.board_state)
+
+            if chosen_node.cost > max_depth_reached:
+                max_depth_reached = chosen_node.cost
+
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
                 break
@@ -102,6 +107,7 @@ class AStarAgent(Agent):
 
         if goal_node:  # if a solution was found, build the action plan
             print(f"Total Number Visited: {len(explored_states)}")
+            print(f"Max Depth Reached {max_depth_reached}")
             return explored_states_list, self.get_action_plan(goal_node)
         else:
             return False  # Solution Not Found (empty action plan)
@@ -135,6 +141,7 @@ class BFSAgent(Agent):
     def solve (self):
         explored_states = set()
         explored_states_list = []
+        max_depth_reached = 0
         # make a queue of nodes to visit
         queue = deque()
         # Insert initial state with no parents in queue
@@ -153,6 +160,9 @@ class BFSAgent(Agent):
             explored_states.add(tuple(chosen_node.board_state.flatten()))
             explored_states_list.append(chosen_node.board_state)
 
+            if chosen_node.cost > max_depth_reached:
+                max_depth_reached = chosen_node.cost
+
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
                 break
@@ -166,6 +176,7 @@ class BFSAgent(Agent):
 
         if goal_node:
             print(f"Total Number Visited: {len(explored_states)}")
+            print(f"Max Depth Reached {max_depth_reached}")
             return explored_states_list, self.get_action_plan(goal_node)
         else:
             return False
@@ -180,6 +191,7 @@ class DFSAgent(Agent):
         explored_states = set()
         # make a stack of nodes to visit 
         stack = []
+        max_depth_reached = 0
         explored_states_list = []
         # Insert initial state with no parents in stack
         initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
@@ -192,6 +204,9 @@ class DFSAgent(Agent):
 
             explored_states.add(tuple(chosen_node.board_state.flatten()))
             explored_states_list.append(chosen_node.board_state)
+
+            if chosen_node.cost > max_depth_reached:
+                max_depth_reached = chosen_node.cost
 
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
@@ -207,6 +222,7 @@ class DFSAgent(Agent):
 
         if goal_node:
             print(f"Total Number Visited: {len(explored_states)}")
+            print(f"Max Depth Reached {max_depth_reached}")
             return explored_states_list, self.get_action_plan(goal_node)
         else:
             return False
