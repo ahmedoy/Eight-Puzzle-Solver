@@ -102,6 +102,7 @@ class AStarAgent(Agent):
                         priority_queue[temp_node] = temp_node.cost + heuristic
 
         if goal_node:  # if a solution was found, build the action plan
+            print(f"Total Number Visited: {len(explored_states)}")
             return self.get_action_plan(goal_node)
         else:
             return False  # Solution Not Found (empty action plan)
@@ -161,6 +162,7 @@ class BFSAgent(Agent):
                     explored_states.add(tuple(state.flatten()))
 
         if goal_node:
+            print(f"Total Number Visited: {len(explored_states)}")
             return self.get_action_plan(goal_node)
         else:
             return False
