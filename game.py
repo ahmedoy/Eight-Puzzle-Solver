@@ -13,10 +13,12 @@ class Game:
             return
         self.display = display
         self.agent = agents.AStarAgent(self.board.get_state())
-        self.action_plan = self.agent.solve() #TODO handle if no solution found (empty action plan list)
+        self.agent= agents.BFSAgent(self.board.get_state())
+        self.expanded_nodes, self.action_plan = self.agent.solve() #TODO handle if no solution found (empty action plan list)
         self.action_idx = 0   
         self.key_responses()
         if display:
+            print("Creating Window")
             self.create_window()
         self.game_loop()        
 
@@ -35,21 +37,34 @@ class Game:
     def on_arrow_key(self, event):
         inverted_controls = {'up':'down', 'down':'up', 'right':'left', 'left':'right'} #inverted controls for replaying action plan backwards
         if event.name == 'right' and self.action_idx < len(self.action_plan):
+            #print(f"action plan = {self.action_plan[self.action_idx]}")
             self.board.take_action(self.action_plan[self.action_idx])
+            #print(f"expanded nodes = {self.expanded_nodes[self.action_idx]}")
+            #self.expanded_nodes_board.take_action(self.expanded_nodes[self.action_idx])
             self.action_idx +=1
-            self.game_screen.display(self.board.get_state())
-        elif event.name == 'left' and self.action_idx > 0:
+            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
+        elif event.name =='right' and self.action_idx < len(self.expanded_nodes) - 1:
+            #self.expanded_nodes_board.take_action(self.expanded_nodes[self.action_idx])
+            self.action_idx +=1
+            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
+        elif event.name == 'left' and self.action_idx > 0 and (self.action_idx < len(self.action_plan) or self.action_idx < len(self.action_plan)):
             self.action_idx -= 1
             self.board.take_action(inverted_controls[self.action_plan[self.action_idx]])
-            self.game_screen.display(self.board.get_state())
+            #self.expanded_nodes_board.take_action(inverted_controls[self.expanded_nodes[self.action_idx]])
+            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
+        elif event.name == 'left' and self.action_idx > 0 and self.action_idx < len(self.expanded_nodes):
+            self.action_idx -= 1
+            #self.expanded_nodes_board.take_action(inverted_controls[self.expanded_nodes[self.action_idx]])
+            self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
+        
 
     
     def create_window(self):
         tile_size = 80
         window_height = 500
-        window_width = 1000
+        window_width = 300
         self.game_screen = screen.Screen(tile_size, window_height, window_width)
-        self.game_screen.display(self.board.get_state())
+        self.game_screen.display(self.board.get_state(), self.board.get_state())
         self.game_screen.run()          
 
         

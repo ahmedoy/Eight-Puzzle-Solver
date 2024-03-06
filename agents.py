@@ -74,6 +74,7 @@ class AStarAgent(Agent):
 
     def solve(self, manhattan_flag=True):
         explored_states = set()
+        explored_states_list =[]
         priority_queue = heapdict.heapdict() # Insert initial state with no parents in priority queue
         initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
         priority_queue[initial_node] = 0
@@ -81,12 +82,12 @@ class AStarAgent(Agent):
 
         while len(priority_queue) > 0:
             (chosen_node, priority) = priority_queue.popitem()
-
+            explored_states.add(tuple(chosen_node.board_state.flatten()))
+            explored_states_list.append(chosen_node.board_state)
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
                 break
 
-            explored_states.add(tuple(chosen_node.board_state.flatten()))
             next_states = self.get_next_states(chosen_node.board_state)
 
             for action, state in next_states:  # Iterate over next states and actions that lead to them
@@ -101,7 +102,7 @@ class AStarAgent(Agent):
                         priority_queue[temp_node] = temp_node.cost + heuristic
 
         if goal_node:  # if a solution was found, build the action plan
-            return self.get_action_plan(goal_node)
+            return explored_states_list,self.get_action_plan(goal_node)
         else:
             return False  # Solution Not Found (empty action plan)
 
@@ -133,24 +134,25 @@ class BFSAgent(Agent):
 
     def solve (self):
         explored_states = set()
+        explored_states_list = []
         # make a queue of nodes to visit
         queue = []
         # Insert initial state with no parents in queue
         initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
-        if not self.isSolvable(initial_node.board_state):
-            return False
-        
+        #if not self.isSolvable(initial_node.board_state):
+        #    return False
+
         queue.append(initial_node)
         goal_node = None
 
         while len(queue) > 0:
             chosen_node = queue.pop(0)
-
+            explored_states.add(tuple(chosen_node.board_state.flatten()))
+            explored_states_list.append(chosen_node.board_state)
             if self.goal_reached(chosen_node.board_state):
                 goal_node = chosen_node
                 break
 
-            explored_states.add(tuple(chosen_node.board_state.flatten()))
             next_states = self.get_next_states(chosen_node.board_state)
 
             for action, state in next_states:
@@ -160,7 +162,7 @@ class BFSAgent(Agent):
                     explored_states.add(tuple(state.flatten()))
 
         if goal_node:
-            return self.get_action_plan(goal_node)
+            return explored_states_list ,self.get_action_plan(goal_node)
         else:
             return False
         
