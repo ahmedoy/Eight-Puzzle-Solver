@@ -62,14 +62,6 @@ class Agent:
             current_node = current_node.parent
         action_plan.reverse()
         return action_plan
-    @staticmethod
-    #def isSolvable(board_state):
-    #    inv_count = 0
-    #    for i in range(9):
-    #        for j in range(i+1, 9):
-    #            if board_state[j] and board_state[i] and board_state[i] > board_state[j]:
-    #                inv_count += 1
-    #    return inv_count % 2 == 0
     
     def __init__(self, current_state):
         self.current_state = current_state
@@ -110,7 +102,7 @@ class AStarAgent(Agent):
 
         if goal_node:  # if a solution was found, build the action plan
             print(f"Total Number Visited: {len(explored_states)}")
-            return self.get_action_plan(goal_node)
+            return explored_states_list, self.get_action_plan(goal_node)
         else:
             return False  # Solution Not Found (empty action plan)
 
@@ -175,7 +167,7 @@ class BFSAgent(Agent):
 
         if goal_node:
             print(f"Total Number Visited: {len(explored_states)}")
-            return self.get_action_plan(goal_node)
+            return explored_states_list, self.get_action_plan(goal_node)
         else:
             return False
 
@@ -217,6 +209,6 @@ class DFSAgent(Agent):
 
         if goal_node:
             print(f"Total Number Visited: {len(explored_states)}")
-            return self.get_action_plan(goal_node)
+            return explored_states_list, self.get_action_plan(goal_node)
         else:
             return False

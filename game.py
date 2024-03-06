@@ -16,8 +16,8 @@ class Game:
             print("Insolvable State. Quitting Game")
             return
         self.display = display
-        self.agent = agents.AStarAgent(self.board.get_state())
-        #self.agent= agents.BFSAgent(self.board.get_state())
+        #self.agent = agents.AStarAgent(self.board.get_state())
+        self.agent= agents.BFSAgent(self.board.get_state())
         self.expanded_nodes, self.action_plan = self.agent.solve() #TODO handle if no solution found (empty action plan list)
         self.action_idx = 0   
         self.key_responses()
@@ -52,12 +52,12 @@ class Game:
             #self.expanded_nodes_board.take_action(self.expanded_nodes[self.action_idx])
             self.action_idx +=1
             self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
-        elif event.name == 'left' and self.action_idx > 0 and (self.action_idx < len(self.action_plan) or self.action_idx < len(self.action_plan)):
+        elif event.name == 'left' and self.action_idx >= 0 and self.action_idx < len(self.action_plan):
             self.action_idx -= 1
             self.board.take_action(inverted_controls[self.action_plan[self.action_idx]])
             #self.expanded_nodes_board.take_action(inverted_controls[self.expanded_nodes[self.action_idx]])
             self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
-        elif event.name == 'left' and self.action_idx > 0 and self.action_idx < len(self.expanded_nodes):
+        elif event.name == 'left' and self.action_idx >= 0 and self.action_idx < len(self.expanded_nodes):
             self.action_idx -= 1
             #self.expanded_nodes_board.take_action(inverted_controls[self.expanded_nodes[self.action_idx]])
             self.game_screen.display(self.board.get_state(), self.expanded_nodes[self.action_idx])
