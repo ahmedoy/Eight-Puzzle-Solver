@@ -9,6 +9,7 @@ class Screen:
         self.initial_state = 0
 
         self.window = tk.Tk()
+        self.window.title("8-Puzzle Game")
         self.solution_canvas = tk.Canvas(self.window, width=self.window_width, height=self.window_height)
         self.expanded_nodes_canvas = tk.Canvas(self.window, width=self.window_width, height=self.window_height)
         self.path_label = tk.Label(self.window, text="Path Nodes", font=('calibre',10,'bold'))
