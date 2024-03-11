@@ -141,6 +141,7 @@ class BFSAgent(Agent):
     def solve (self):
         explored_states = set()
         explored_states_list = []
+        union_set = set()
         max_depth_reached = 0
         # make a queue of nodes to visit
         queue = deque()
@@ -153,6 +154,7 @@ class BFSAgent(Agent):
         #     return False
         
         queue.append(initial_node)
+        union_set.add(tuple(initial_node.board_state.flatten()))
         goal_node = None
 
         while len(queue) > 0:
@@ -171,8 +173,10 @@ class BFSAgent(Agent):
 
             for action, state in next_states:
                 temp_node = Node(board_state=state, action=action, cost=1+chosen_node.cost, parent=chosen_node)
-                if tuple(state.flatten()) not in explored_states and temp_node not in queue:
+                if tuple(state.flatten()) not in union_set:
                     queue.append(temp_node)
+                    union_set.add(tuple(state.flatten()))
+                    
 
         if goal_node:
             print(f"Total Number Visited: {len(explored_states)}")
@@ -193,10 +197,12 @@ class DFSAgent(Agent):
         stack = []
         max_depth_reached = 0
         explored_states_list = []
+        union_set = set()
         # Insert initial state with no parents in stack
         initial_node = Node(board_state=self.current_state, action=None, cost=0, parent=None)
 
         stack.append(initial_node)
+        union_set.add(tuple(initial_node.board_state.flatten()))
         goal_node = None
 
         while stack:
@@ -217,8 +223,9 @@ class DFSAgent(Agent):
             # Push unexplored next states onto the stack
             for action, state in next_states:
                 temp_node = Node(board_state=state, action=action, cost=1 + chosen_node.cost, parent=chosen_node)
-                if tuple(state.flatten()) not in explored_states and temp_node not in stack:
+                if tuple(state.flatten()) not in union_set:
                     stack.append(temp_node)
+                    union_set.add(tuple(state.flatten()))
 
         if goal_node:
             print(f"Total Number Visited: {len(explored_states)}")
